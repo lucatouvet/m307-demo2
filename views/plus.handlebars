@@ -1,0 +1,16 @@
+<div class="upload-page">
+    <h1>Bild hochladen</h1>
+    <form action="/upload" enctype="multipart/form-data" method="post" class="upload-form">
+      <label for="titel">Titel</label>
+      <input type="text" id="titel" name="titel" required />
+  
+      <label for="beschreibung">Beschreibung</label>
+      <textarea id="beschreibung" name="beschreibung"></textarea>
+  
+      <label for="image">Bild auswählen</label>
+      <input type="file" id="image" name="image" accept="image/*" required />
+  
+      <button type="submit">Hochladen</button>
+    </form>
+  </div>
+  

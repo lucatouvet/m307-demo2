@@ -1,7 +1,12 @@
-<h1>Hallo Welt!</h1>
+<h1>Monday design inspiration.</h1>
+<h2>new inspiration every day</h2>
 
-<p>Willkommen auf meiner Website. Hier wird in Kürze eine interaktive Webapplikation entstehen. Viel Vergnügen!</p>
-
-<img src="construction.gif" width="200">
-
-{{> contactform}}
+<ul>
+    {{#each bilder}}
+      <li>
+        <h3>{{this.titel}}</h3>
+        <p>{{this.beschreibung}}</p>
+        <img src="/uploads/{{this.dateiname}}" alt="{{this.titel}}" width="200" />
+      </li>
+    {{/each}}
+  </ul>

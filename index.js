@@ -1,5 +1,6 @@
-import { createApp, upload } from "./config.js"; // Upload-Funktion hinzugefügt
+import { createApp } from "./config.js";
 
+// App erstellen und konfigurieren
 const app = createApp({
   user: "lucalodom",
   host: "bbz.cloud",
@@ -10,51 +11,70 @@ const app = createApp({
 
 /* Startseite */
 app.get("/", async (req, res) => {
-  const result = await app.locals.pool.query("SELECT * FROM gallerie"); // Alle Bilder abrufen
-  res.render("start", { bilder: result.rows }); // An die View übergeben
+  try {
+    const result = await app.locals.pool.query("SELECT * FROM gallerie"); // Alle Bilder abrufen
+    res.render("start", { bilder: result.rows }); // An die View übergeben
+  } catch (err) {
+    console.error("Fehler beim Abrufen der Bilder:", err);
+    res.status(500).send("Fehler beim Abrufen der Bilder");
+  }
 });
 
-
+/* Impressum */
 app.get("/impressum", async function (req, res) {
   res.render("impressum", {});
 });
 
+/* Login-Seite */
 app.get("/login", async function (req, res) {
   res.render("login", {});
 });
 
-app.get("/save", async function (req, res) {
-  res.render("save", {});
+
+app.get("/plus", async function (req, res) {
+  res.render("plus", {}); // Rendert die plus.handlebars-Datei
 });
 
-// Neue Route für das Hochladen von Dateien
+
+/* Save-Seite */
+app.get("/save", async function (req, res) {
+  try {
+    const user = req.session.user;
+
+    if (!user) {
+      console.log("Kein Benutzer eingeloggt. Weiterleitung zu /login.");
+      res.redirect("/login");
+      return;
+    }
+
+    const result = await app.locals.pool.query(
+      `SELECT g.dateiname, g.hochgeladen_am, g.autor
+       FROM save s
+       JOIN gallerie g ON s.gallerie_id = g.id
+       WHERE s.user_id = $1`,
+      [user.id]
+    );
+
+    console.log("Abfrageergebnis:", result.rows);
+
+    // Übergibt `username` und gespeicherte Bilder an die View
+    res.render("save", {
+      bilder: result.rows,
+      username: user.username, // `username` aus der Session
+    });
+  } catch (err) {
+    console.error("Fehler beim Abrufen der gespeicherten Bilder:", err);
+    res.status(500).send("Fehler beim Abrufen der gespeicherten Bilder");
+  }
+});
+
+
+/* Neue Route für das Hochladen von Dateien */
 app.get("/new_post", async function (req, res) {
   res.render("new_post", {}); // Verweis auf das Formular
 });
 
-app.post("/create_post", upload.single('image'), async function (req, res) {
-  await app.locals.pool.query(
-    "INSERT INTO todos (text, dateiname) VALUES ($1, $2)",
-    [req.body.text, req.file.filename]
-  );
-  res.redirect("/"); // Nach dem Hochladen auf die Startseite zurück
-});
-
-/* Wichtig! Diese Zeilen müssen immer am Schluss der Website stehen! */
+/* Server starten */
 app.listen(3010, () => {
   console.log(`Example app listening at http://localhost:3010`);
-});
-
-
-app.post("/upload", upload.single("image"), async (req, res) => {
-  const { titel, beschreibung } = req.body; // Titel und Beschreibung aus dem Formular
-  const dateiname = req.file.filename; // Dateiname des hochgeladenen Bildes
-
-  // Daten in die Datenbank speichern
-  await app.locals.pool.query(
-    "INSERT INTO gallerie (dateiname, titel, beschreibung) VALUES ($1, $2, $3)",
-    [dateiname, titel, beschreibung]
-  );
-
-  res.redirect("/"); // Zurück zur Startseite
 });

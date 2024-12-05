@@ -1,1 +1,14 @@
-<h1>my saved inspirations</h1>
+<h1>Hello, {{username}}!</h1>
+<h2>Your saved inspiration</h2>
+
+<div class="bilder-grid">
+  {{#if bilder.length}}
+    {{#each bilder}}
+      <div class="bild-container">
+        <img src="/uploads/{{this.dateiname}}" alt="Bild" />
+      </div>
+    {{/each}}
+  {{else}}
+    <p>No saved inspiration found.</p>
+  {{/if}}
+</div>

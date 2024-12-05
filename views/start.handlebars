@@ -1,12 +1,16 @@
 <h1>Monday design inspiration.</h1>
 <h2>new inspiration every day</h2>
 
-<ul>
-    {{#each bilder}}
-      <li>
-        <h3>{{this.titel}}</h3>
-        <p>{{this.beschreibung}}</p>
-        <img src="/uploads/{{this.dateiname}}" alt="{{this.titel}}" width="200" />
-      </li>
-    {{/each}}
-  </ul>
+<div class="bilder-grid">
+  {{#each bilder}}
+    <div class="bild-container">
+      <img src="/uploads/{{this.dateiname}}" alt="Bild" />
+
+      <form action="/save/{{id}}" enctype="multipart/form-data" method="POST" class="save-btn">
+        <input type="image" src="https://i.ibb.co/7KsdSWr/save-icon.png">
+      </form>
+      
+    </div>
+  {{/each}}
+</div>
+

@@ -182,3 +182,34 @@ button:hover {
 .upload-form button:hover {
   opacity: 0.8;
 }
+
+
+.bilder-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 Bilder pro Reihe */
+  gap: 20px; /* Abstand zwischen den Bildern */
+  margin: 20px;
+}
+
+.bild-container img {
+  width: 100%; /* Bilder passen sich an die Spaltenbreite an */
+  height: auto; /* Proportionen des Bildes beibehalten */
+  border-radius: 10px; /* Optionale abgerundete Ecken */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Optionaler Schatten */
+}
+
+
+.bild-container {
+  position: relative; /* Damit der Button unten rechts positioniert werden kann */
+}
+
+.bild-container .save-btn {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.bild-container .save-btn:hover {
+  opacity: 0.8;
+}

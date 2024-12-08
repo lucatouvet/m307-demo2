@@ -30,11 +30,14 @@ app.get("/login", async function (req, res) {
   res.render("login", {});
 });
 
+/* register-Seite */
+app.get("/register", async function (req, res) {
+  res.render("register", {});
+});
 
 app.get("/plus", async function (req, res) {
   res.render("plus", {}); // Rendert die plus.handlebars-Datei
 });
-
 
 /* Save-Seite */
 app.get("/save", async function (req, res) {
@@ -43,7 +46,7 @@ app.get("/save", async function (req, res) {
 
     if (!user) {
       console.log("Kein Benutzer eingeloggt. Weiterleitung zu /login.");
-      res.redirect("/login");
+      res.redirect("/register");
       return;
     }
 
@@ -67,7 +70,6 @@ app.get("/save", async function (req, res) {
     res.status(500).send("Fehler beim Abrufen der gespeicherten Bilder");
   }
 });
-
 
 /* Neue Route für das Hochladen von Dateien */
 app.get("/new_post", async function (req, res) {
